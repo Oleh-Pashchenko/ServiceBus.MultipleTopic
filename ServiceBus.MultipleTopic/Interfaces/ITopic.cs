@@ -55,6 +55,30 @@ namespace ServiceBus.MultipleTopic.Interfaces
         bool DeleteSubscription(string subscriptionName);
 
         /// <summary>
+        /// Close all subscriptions of this topic
+        /// </summary>
+        void CloseSubscriptions();
+
+        /// <summary>
+        /// Asynchronously close all subscriptions of tios topic
+        /// </summary>
+        /// <returns>Async void</returns>
+        Task CloseSubscriptionsAsync();
+
+        /// <summary>
+        /// Close  subscription of this topic
+        /// </summary>
+        /// <param name="subscriptionName">Subscriptions name</param>
+        void CloseSubscription(string subscriptionName);
+
+        /// <summary>
+        /// Asynchronously close subscriptio of tios topic
+        /// </summary>
+        /// <param name="subscriptionName">Subscriptions name</param>
+        /// <returns>Async void</returns>
+        Task CloseSubscriptionAsync(string subscriptionName);
+
+        /// <summary>
         /// Asynchronously create new subscriptions
         /// </summary>
         /// <param name="subscriptionName">Subscriptions name</param>

@@ -7,6 +7,7 @@
 
 namespace ServiceBus.MultipleTopic.Implementation
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.ServiceBus;
@@ -159,6 +160,60 @@ namespace ServiceBus.MultipleTopic.Implementation
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Close all subscriptions of the topic
+        /// </summary>
+        public void CloseSubscriptions()
+        {
+            foreach (var item in this.subscriptions)
+            {
+                this.CloseSubscription(item.Key);
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously close all subscriptions of the topic
+        /// </summary>
+        /// <returns>Async void</returns>
+        public async Task CloseSubscriptionsAsync()
+        {
+            foreach (var item in this.subscriptions)
+            {
+                await this.CloseSubscriptionAsync(item.Key);
+            }
+        }
+
+        /// <summary>
+        /// Close subscription by name
+        /// </summary>
+        /// <param name="subscriptionName">Subscription name</param>
+        public void CloseSubscription(string subscriptionName)
+        {
+            if (this.subscriptions[subscriptionName] != null)
+            {
+                if (!this.subscriptions[subscriptionName].IsClosed)
+                {
+                    this.subscriptions[subscriptionName]?.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Asynchronously c by lose subscription by name
+        /// </summary>
+        /// <param name="subscriptionName">Subscription name</param>
+        /// <returns>Async void</returns>
+        public async Task CloseSubscriptionAsync(string subscriptionName)
+        {
+            if (this.subscriptions[subscriptionName] != null)
+            {
+                if (!this.subscriptions[subscriptionName].IsClosed)
+                {
+                    await this.subscriptions[subscriptionName]?.CloseAsync();
+                }
+            }
         }
     }
 }

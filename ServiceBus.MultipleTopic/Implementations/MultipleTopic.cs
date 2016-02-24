@@ -7,6 +7,7 @@
 
 namespace ServiceBus.MultipleTopic.Implementation
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.ServiceBus;
@@ -123,6 +124,50 @@ namespace ServiceBus.MultipleTopic.Implementation
         private ITopic CreateTopicClient(string topicPath)
         {
             return new Topic(this.connectionString, topicPath);
+        }
+
+        public void CloseTopic(string topicPath)
+        {
+            if (this.topics[topicPath] != null)
+            {
+                if (this.topics[topicPath].TopicClient != null)
+                {
+                    if (!this.topics[topicPath].TopicClient.IsClosed)
+                    {
+                        this.topics[topicPath].TopicClient.Close();
+                    }
+                }
+            }
+        }
+
+        public void CloseTopics()
+        {
+            foreach (var item in topics)
+            {
+                CloseTopic(item.Key);
+            }
+        }
+
+        public async Task CloseTopicAsync(string topicPath)
+        {
+            if (this.topics[topicPath] != null)
+            {
+                if (this.topics[topicPath].TopicClient != null)
+                {
+                    if (!this.topics[topicPath].TopicClient.IsClosed)
+                    {
+                        await this.topics[topicPath].TopicClient.CloseAsync();
+                    }
+                }
+            }
+        }
+
+        public async Task CloseTopicsAsync()
+        {
+            foreach (var item in topics)
+            {
+                await CloseTopicAsync(item.Key);
+            }
         }
     }
 }
