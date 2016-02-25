@@ -34,12 +34,28 @@ namespace ServiceBus.MultipleTopic.Interfaces
         /// <returns>True if successfully delete from Service Bus</returns>
         bool DeleteTopic(string topicPath);
 
+        /// <summary>
+        /// Close topic by path/name
+        /// </summary>
+        /// <param name="topicPath">Topic path/name</param>
         void CloseTopic(string topicPath);
 
+        /// <summary>
+        /// Close all topics
+        /// </summary>
         void CloseTopics();
 
+        /// <summary>
+        /// Asynchronously close topic
+        /// </summary>
+        /// <param name="topicPath">Topic path/name</param>
+        /// <returns>Async void</returns>
         Task CloseTopicAsync(string topicPath);
 
+        /// <summary>
+        /// Asynchronously close topics
+        /// </summary>
+        /// <returns>Async void</returns>
         Task CloseTopicsAsync();
 
         /// <summary>

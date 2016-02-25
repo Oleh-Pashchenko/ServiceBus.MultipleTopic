@@ -60,7 +60,7 @@ namespace ServiceBus.MultipleTopic.Interfaces
         void CloseSubscriptions();
 
         /// <summary>
-        /// Asynchronously close all subscriptions of tios topic
+        /// Asynchronously close all subscriptions of the topic
         /// </summary>
         /// <returns>Async void</returns>
         Task CloseSubscriptionsAsync();
@@ -72,7 +72,7 @@ namespace ServiceBus.MultipleTopic.Interfaces
         void CloseSubscription(string subscriptionName);
 
         /// <summary>
-        /// Asynchronously close subscriptio of tios topic
+        /// Asynchronously close subscription of the topic
         /// </summary>
         /// <param name="subscriptionName">Subscriptions name</param>
         /// <returns>Async void</returns>

@@ -7,7 +7,6 @@
 
 namespace ServiceBus.MultipleTopic.Implementation
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.ServiceBus;
@@ -117,15 +116,9 @@ namespace ServiceBus.MultipleTopic.Implementation
         }
 
         /// <summary>
-        /// Create new TopicClient
+        /// Close topic by path/name
         /// </summary>
-        /// <param name="topicPath">Topic name</param>
-        /// <returns>Topic Client</returns>
-        private ITopic CreateTopicClient(string topicPath)
-        {
-            return new Topic(this.connectionString, topicPath);
-        }
-
+        /// <param name="topicPath">Topic path/name</param>
         public void CloseTopic(string topicPath)
         {
             if (this.topics[topicPath] != null)
@@ -134,20 +127,29 @@ namespace ServiceBus.MultipleTopic.Implementation
                 {
                     if (!this.topics[topicPath].TopicClient.IsClosed)
                     {
+                        this.topics[topicPath].CloseSubscriptions();
                         this.topics[topicPath].TopicClient.Close();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Close all topics
+        /// </summary>
         public void CloseTopics()
         {
-            foreach (var item in topics)
+            foreach (var item in this.topics)
             {
-                CloseTopic(item.Key);
+                this.CloseTopic(item.Key);
             }
         }
 
+        /// <summary>
+        /// Asynchronously close topic
+        /// </summary>
+        /// <param name="topicPath">Topic path/name</param>
+        /// <returns>Async void</returns>
         public async Task CloseTopicAsync(string topicPath)
         {
             if (this.topics[topicPath] != null)
@@ -156,18 +158,33 @@ namespace ServiceBus.MultipleTopic.Implementation
                 {
                     if (!this.topics[topicPath].TopicClient.IsClosed)
                     {
+                        await this.topics[topicPath].CloseSubscriptionsAsync();
                         await this.topics[topicPath].TopicClient.CloseAsync();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Asynchronously close topics
+        /// </summary>
+        /// <returns>Async void</returns>
         public async Task CloseTopicsAsync()
         {
-            foreach (var item in topics)
+            foreach (var item in this.topics)
             {
-                await CloseTopicAsync(item.Key);
+                await this.CloseTopicAsync(item.Key);
             }
+        }
+
+        /// <summary>
+        /// Create new TopicClient
+        /// </summary>
+        /// <param name="topicPath">Topic name</param>
+        /// <returns>Topic Client</returns>
+        private ITopic CreateTopicClient(string topicPath)
+        {
+            return new Topic(this.connectionString, topicPath);
         }
     }
 }
